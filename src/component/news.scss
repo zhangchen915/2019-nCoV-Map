@@ -1,0 +1,24 @@
+.newsContent {
+  padding: 20px 0;
+  background-color: #e0e7f0;
+
+  .newsList {
+    width: 50%;
+    margin: 0 auto;
+
+    .newsItem {
+      text-align: left;
+      padding: 15px;
+      margin-bottom: 20px;
+      background-color: #eff3f6;
+      border-radius: 10px;
+      text-shadow: none;
+
+      a {
+        color: #367DD9;
+      }
+    }
+  }
+}
+
+
