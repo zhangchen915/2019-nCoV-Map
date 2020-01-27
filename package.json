@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/zhangchen915/2019-nCoV-Map#readme",
   "dependencies": {
+    "@antv/g2": "^3.5.11",
     "@antv/l7": "^2.0.9",
     "@antv/l7-maps": "^2.0.9",
     "whatwg-fetch": "^3.0.0"
