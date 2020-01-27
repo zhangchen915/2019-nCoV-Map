@@ -20,7 +20,15 @@
     "@antv/g2": "^3.5.11",
     "@antv/l7": "^2.0.9",
     "@antv/l7-maps": "^2.0.9",
-    "hyperapp": "^2.0.3",
+    "preact": "^10.2.1",
+    "rss-parser": "^3.7.3",
     "whatwg-fetch": "^3.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.3",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-react-jsx": "^7.8.3",
+    "babel-preset-env": "^1.7.0",
+    "sass": "^1.25.1-test.1"
   }
 }

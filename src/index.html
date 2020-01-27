@@ -45,7 +45,7 @@
         .title, main {
             color: #70B7FD;
             text-align: center;
-            text-shadow: 0 13px 8px #bcd9ff, 0 -2px 1px #fff;
+            text-shadow: 0 10px 5px #bcd9ff, 0 -2px 1px #fff;
         }
 
         .top {
@@ -54,14 +54,14 @@
             justify-content: space-around;
         }
 
-        main {
+        section {
             display: inline-block;
             width: 300px;
             color: #a5c2e8;
         }
 
-        main h2 {
-            margin-bottom: 0;
+        section h2 {
+            margin-top: 0;
         }
 
         #c1 {
@@ -80,13 +80,7 @@
 </head>
 <body>
 <h1 class="title">2019-nCoV-可视化</h1>
-<div class="top">
-    <main id="app"></main>
-    <div id="c1">
-        <div class="tip">⚠︎ 注意：接口不同数据可能存在滞后</div>
-    </div>
-</div>
-<div id="map"></div>
+<main></main>
 <a href="https://github.com/zhangchen915/2019-nCoV-Map" class="github-corner">
     <svg width="80" height="80" viewBox="0 0 250 250"
          style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
@@ -98,6 +92,5 @@
     </svg>
 </a>
 <script src="./index.js"></script>
-<script src="./totalCases.js"></script>
 </body>
 </html>
