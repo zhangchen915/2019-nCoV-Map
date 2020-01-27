@@ -42,13 +42,13 @@
             }
         }
 
-        .title,main{
+        .title, main {
             color: #70B7FD;
             text-align: center;
             text-shadow: 0 13px 8px #bcd9ff, 0 -2px 1px #fff;
         }
 
-        .top{
+        .top {
             display: flex;
             align-items: start;
             justify-content: space-around;
@@ -60,12 +60,21 @@
             color: #a5c2e8;
         }
 
-        main h2{
+        main h2 {
             margin-bottom: 0;
         }
 
         #c1 {
+            position: relative;
             display: inline-block;
+        }
+
+        #c1 .tip{
+            position: absolute;
+            right: 0;
+            bottom: 10px;
+            color: #bcd9ff;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -73,7 +82,9 @@
 <h1 class="title">2019-nCoV-可视化</h1>
 <div class="top">
     <main id="app"></main>
-    <div id="c1"></div>
+    <div id="c1">
+        <div class="tip">⚠︎ 注意：接口不同数据可能存在滞后</div>
+    </div>
 </div>
 <div id="map"></div>
 <a href="https://github.com/zhangchen915/2019-nCoV-Map" class="github-corner">

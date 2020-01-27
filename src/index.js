@@ -34,16 +34,22 @@ fetch('https://arena.360.cn/api/service/data/ncov-live-3')
         });
     });
 
-fetch('http://api.tianapi.com/txapi/ncovcity/index?key=ad031245a5518179cd62d16e5c18eea0')
+fetch('//api.tianapi.com/txapi/ncovcity/index?key=ad031245a5518179cd62d16e5c18eea0')
     .then(res => res.json())
     .then(res => {
         let data = [];
 
         res.newslist.forEach(e => {
             try {
-                if (Array.isArray(e.cities)) e.cities.forEach(info => {
-                    data.push(Object.assign(info, cityGeo[info.cityName]))
-                })
+                let pushNum = 0;
+                if (Array.isArray(e.cities)) {
+                    e.cities.forEach(info => {
+                        if (!cityGeo[info.cityName]) return;
+                        data.push(Object.assign(info, cityGeo[info.cityName]));
+                        pushNum++
+                    })
+                }
+                if (!pushNum) data.push(Object.assign(e, cityGeo[e.provinceShortName]))
             } catch (e) {
                 console.error(e)
             }
@@ -85,7 +91,7 @@ fetch('http://api.tianapi.com/txapi/ncovcity/index?key=ad031245a5518179cd62d16e5
                 closeButton: false
             })
                 .setLnglat(e.lngLat)
-                .setHTML(`<div>${e.feature.cityName}</div><div>确诊：${e.feature.confirmedCount} 人</div><div>死亡：${e.feature.deadCount} 人</div><div>治愈：${e.feature.curedCount} 人</div>`);
+                .setHTML(`<div>${e.feature.cityName || e.feature.provinceShortName}</div><div>确诊：${e.feature.confirmedCount} 人</div><div>死亡：${e.feature.deadCount} 人</div><div>治愈：${e.feature.curedCount} 人</div>`);
             scene.addPopup(popup);
         });
 
