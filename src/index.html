@@ -41,14 +41,40 @@
                 animation: octocat-wave 560ms ease-in-out
             }
         }
+
+        .title,main{
+            color: #70B7FD;
+            text-align: center;
+            text-shadow: 0 13px 8px #bcd9ff, 0 -2px 1px #fff;
+        }
+
+        .top{
+            display: flex;
+            align-items: start;
+            justify-content: space-around;
+        }
+
+        main {
+            display: inline-block;
+            width: 300px;
+            color: #a5c2e8;
+        }
+
+        main h2{
+            margin-bottom: 0;
+        }
+
+        #c1 {
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
-<h1>2019-nCoV-Map</h1>
-<main id="app">
-
-</main>
-<div id="c1"></div>
+<h1 class="title">2019-nCoV-可视化</h1>
+<div class="top">
+    <main id="app"></main>
+    <div id="c1"></div>
+</div>
 <div id="map"></div>
 <a href="https://github.com/zhangchen915/2019-nCoV-Map" class="github-corner">
     <svg width="80" height="80" viewBox="0 0 250 250"
