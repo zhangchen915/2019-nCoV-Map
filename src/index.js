@@ -25,10 +25,10 @@ fetch('https://arena.360.cn/api/service/data/ncov-live-3')
             init: data.data.total,
             view: state =>
                 h("main", {}, [
-                    h("h1", {}, `确诊${state.diagnosed}`),
-                    h("h1", {}, `疑似${state.suspected}`),
-                    h("h1", {}, `治愈${state.cured}`),
-                    h("h1", {}, `死亡💀${state.died}`),
+                    h("h2", {}, `确诊 ${state.diagnosed}`),
+                    h("h2", {}, `疑似 ${state.suspected}`),
+                    h("h2", {}, `治愈 ${state.cured}`),
+                    h("h2", {}, `死亡 ${state.died}`),
                 ]),
             node: document.getElementById("app")
         });
