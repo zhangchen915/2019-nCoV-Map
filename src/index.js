@@ -1,6 +1,8 @@
-import { h, app } from "hyperapp"
+import {h, app} from "hyperapp"
 import {PointLayer, Popup, Scale, Scene, Zoom} from '@antv/l7';
 import {GaodeMap} from '@antv/l7-maps';
+
+import cityGeo from './cityGeo'
 
 const scene = new Scene({
     id: 'map',
@@ -30,32 +32,48 @@ fetch('https://arena.360.cn/api/service/data/ncov-live-3')
                 ]),
             node: document.getElementById("app")
         });
+    });
 
-        detail.forEach(e => e.pos = e.pos.map(p => +p));
+fetch('http://api.tianapi.com/txapi/ncovcity/index?key=ad031245a5518179cd62d16e5c18eea0')
+    .then(res => res.json())
+    .then(res => {
+        let data = [];
+
+        res.newslist.forEach(e => {
+            try {
+                if (Array.isArray(e.cities)) e.cities.forEach(info => {
+                    data.push(Object.assign(info, cityGeo[info.cityName]))
+                })
+            } catch (e) {
+                console.error(e)
+            }
+        });
 
         const pointLayer = new PointLayer({})
-            .source(detail, {
+            .source(data, {
                 parser: {
                     type: 'json',
-                    coordinates: 'pos',
+                    x: 'lng',
+                    y: 'lat'
                 }
             })
             .shape('cylinder')
-            .size('diagnosed', d => [2, 2, d / 10])
+            .size('confirmedCount', d => [3, 3, d / 2])
             .active(true)
             .color('#a5c2e8')
             .style({
                 opacity: 1.0
             });
         const pointLayerDied = new PointLayer({})
-            .source(detail, {
+            .source(data, {
                 parser: {
                     type: 'json',
-                    coordinates: 'pos',
+                    x: 'lng',
+                    y: 'lat'
                 }
             })
             .shape('cylinder')
-            .size('died', d => [2, 2, d / 10])
+            .size('deadCount', d => [3, 3, d / 2])
             .active(true)
             .color('red')
             .style({
@@ -67,7 +85,7 @@ fetch('https://arena.360.cn/api/service/data/ncov-live-3')
                 closeButton: false
             })
                 .setLnglat(e.lngLat)
-                .setHTML(`<div>${e.feature.city}</div><div>确诊：${e.feature.diagnosed} 人</div><div>死亡：${e.feature.died} 人</div><div>治愈：${e.feature.cured} 人</div>`);
+                .setHTML(`<div>${e.feature.cityName}</div><div>确诊：${e.feature.confirmedCount} 人</div><div>死亡：${e.feature.deadCount} 人</div><div>治愈：${e.feature.curedCount} 人</div>`);
             scene.addPopup(popup);
         });
 
