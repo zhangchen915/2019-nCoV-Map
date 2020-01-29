@@ -1,0 +1,38 @@
+.title, main {
+  color: #70B7FD;
+  text-shadow: 0 10px 5px #bcd9ff, 0 -2px 1px #fff;
+}
+
+.title{
+  text-align: center;
+}
+
+
+.top {
+  display: flex;
+  align-items: start;
+  justify-content: space-around;
+  section {
+    display: inline-block;
+    width: 300px;
+    color: #a5c2e8;
+    text-align: center;
+
+    h2 {
+      margin-top: 0;
+    }
+  }
+}
+
+#c1 {
+  position: relative;
+  display: inline-block;
+
+  .tip{
+    position: absolute;
+    right: 0;
+    bottom: 10px;
+    color: #bcd9ff;
+    font-size: 14px;
+  }
+}

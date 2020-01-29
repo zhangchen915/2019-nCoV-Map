@@ -3,6 +3,8 @@ import {renderLiner} from "./totalCases";
 import {renderLayer} from "./renderLayer";
 import News from "./news";
 
+import './app.scss'
+
 export default class App extends Component {
     constructor() {
         super();
