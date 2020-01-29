@@ -1,7 +1,8 @@
 import {PointLayer, Popup, Scale, Scene, Zoom} from '@antv/l7';
 import {GaodeMap} from '@antv/l7-maps';
 
-import cityGeo from '../cityGeo'
+import cityGeo from '../data/cityGeo'
+import countryGeo from '../data/country'
 
 export const renderLayer = () => {
     const scene = new Scene({
@@ -18,26 +19,40 @@ export const renderLayer = () => {
         })
     });
 
-    fetch('//api.tianapi.com/txapi/ncovcity/index?key=ad031245a5518179cd62d16e5c18eea0')
+    fetch('https://service-n9zsbooc-1252957949.gz.apigw.tencentcs.com/release/qq')
         .then(res => res.json())
         .then(res => {
             let data = [];
+            let cacheCity = {};
 
-            res.newslist.forEach(e => {
+            res.data.wuwei_ww_area_counts.forEach(e => {
+                const {country, area, city} = e;
+
                 try {
-                    let pushNum = 0;
-                    if (Array.isArray(e.cities)) {
-                        e.cities.forEach(info => {
-                            if (!cityGeo[info.cityName]) return;
-                            data.push(Object.assign(info, cityGeo[info.cityName]));
-                            pushNum++
-                        })
+                    if (cityGeo[city] || cityGeo[area]) {
+                        if (cityGeo[city] || !city) {
+                            data.push(Object.assign(e, cityGeo[city || area]))
+                        } else if (cityGeo[area]) {
+                            if (cacheCity[area]) {
+                                const {confirm, dead, heal} = e;
+                                cacheCity[area].confirm += confirm;
+                                cacheCity[area].dead += dead;
+                                cacheCity[area].heal += heal
+                            } else {
+                                e.city = '';
+                                cacheCity[area] = Object.assign(e, cityGeo[area])
+                            }
+                        }
+                    } else if (countryGeo[country]) {
+                        const [lng, lat] = countryGeo[country];
+                        data.push(Object.assign(e, {lng, lat}))
                     }
-                    if (!pushNum) data.push(Object.assign(e, cityGeo[e.provinceShortName]))
                 } catch (e) {
                     console.error(e)
                 }
             });
+
+            data = data.concat(Object.values(cacheCity))
 
             const pointLayer = new PointLayer({})
                 .source(data, {
@@ -48,7 +63,7 @@ export const renderLayer = () => {
                     }
                 })
                 .shape('cylinder')
-                .size('confirmedCount', d => [3, 3, d / 2])
+                .size('confirm', d => [2, 2, d / 2])
                 .active(true)
                 .color('#a5c2e8')
                 .style({
@@ -63,19 +78,20 @@ export const renderLayer = () => {
                     }
                 })
                 .shape('cylinder')
-                .size('deadCount', d => [3, 3, d / 2])
+                .size('dead', d => [2, 2, d / 2])
                 .active(true)
                 .color('red')
                 .style({
                     opacity: 1.0
                 });
             pointLayer.on('mousemove', e => {
+                const {country, area, city, confirm, dead, heal} = e.feature;
                 const popup = new Popup({
                     offsets: [0, 0],
                     closeButton: false
                 })
                     .setLnglat(e.lngLat)
-                    .setHTML(`<div>${e.feature.cityName || e.feature.provinceShortName}</div><div>确诊：${e.feature.confirmedCount} 人</div><div>死亡：${e.feature.deadCount} 人</div><div>治愈：${e.feature.curedCount} 人</div>`);
+                    .setHTML(`<div>${city || area || country}</div><div>确诊：${confirm} 人</div><div>死亡：${dead} 人</div><div>治愈：${heal} 人</div>`);
                 scene.addPopup(popup);
             });
 
