@@ -1,4 +1,4 @@
-import {PointLayer, Popup, Scale, Scene, Zoom} from '@antv/l7';
+import {PointLayer, Popup, Scene, Zoom, Layers} from '@antv/l7';
 import {GaodeMap} from '@antv/l7-maps';
 
 import cityGeo from '../data/cityGeo'
@@ -52,7 +52,7 @@ export const renderLayer = () => {
                 }
             });
 
-            data = data.concat(Object.values(cacheCity))
+            data = data.concat(Object.values(cacheCity));
 
             const pointLayer = new PointLayer({})
                 .source(data, {
@@ -78,27 +78,34 @@ export const renderLayer = () => {
                     }
                 })
                 .shape('cylinder')
-                .size('dead', d => [2, 2, d / 2])
+                .size('dead', d => d[0] ? [2, 2, d / 2] : [0, 0, 0])
                 .active(true)
                 .color('red')
                 .style({
-                    opacity: 1.0
+                    opacity: .9
                 });
-            pointLayer.on('mousemove', e => {
+
+            const popup = e => {
                 const {country, area, city, confirm, dead, heal} = e.feature;
-                const popup = new Popup({
+                scene.addPopup(new Popup({
                     offsets: [0, 0],
                     closeButton: false
                 })
                     .setLnglat(e.lngLat)
-                    .setHTML(`<div>${city || area || country}</div><div>确诊：${confirm} 人</div><div>死亡：${dead} 人</div><div>治愈：${heal} 人</div>`);
-                scene.addPopup(popup);
-            });
+                    .setHTML(`<div>${city || area || country}</div><div>确诊：${confirm} 人</div><div>死亡：${dead} 人</div><div>治愈：${heal} 人</div>`));
+            };
+            pointLayer.on('mousemove', popup);
+            pointLayerDied.on('mousemove', popup);
 
             scene.addLayer(pointLayer);
             scene.addLayer(pointLayerDied);
 
+            scene.addControl(new Layers({
+                overlayers: {
+                    确诊: pointLayer,
+                    死亡: pointLayerDied
+                }
+            }));
             scene.addControl(new Zoom());
-            scene.addControl(new Scale());
         })
 };
